@@ -9,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+import GameDetails from "./Components/GameDetails";
 
 import Login from "./Components/Login/Login";
 import Account from "./Components/Account/Account";
@@ -29,6 +30,8 @@ function App() {
           <Route path="/games" element={<Games />} />
           <Route path="/account" element={<Account />} />
           <Route path="*" element={<h1>Page not found</h1>} />
+
+          <Route path="/games/:gameName" element={<GameDetails />} />
         </Routes>
       </Router>
       <Footer />
