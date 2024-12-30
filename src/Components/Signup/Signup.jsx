@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../../config/firebase"; // Import Firebase auth object
+import { doc, setDoc } from "firebase/firestore";
 
 const Signup = () => {
   // State for form fields
@@ -10,6 +12,40 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    // Validate passwords
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    try {
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // Update the user's profile with the username
+      await updateProfile(userCredential.user, { displayName: username });
+
+      // Add user details to Firestore
+      const user = userCredential.user;
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        email: email,
+        balance: 1000, // Starting balance for the user
+      });
+
+      alert("Account created successfully! You can now log in.");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <Container
@@ -20,7 +56,7 @@ const Signup = () => {
         <Col>
           <div className="login-box p-4 shadow rounded bg-light">
             <h3 className="text-center mb-4">Sign Up</h3>
-            <Form>
+            <Form onSubmit={handleSignup}>
               {/* Username Field */}
               <Form.Group className="mb-3" controlId="username">
                 <Form.Label style={{color: "black"}}>Username</Form.Label>
