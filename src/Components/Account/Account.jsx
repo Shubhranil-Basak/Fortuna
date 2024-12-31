@@ -1,5 +1,7 @@
 import React from "react";
 import { useAuth } from "../../AuthContext";
+import { auth } from "../../config/firebase";
+import { signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -25,6 +27,12 @@ const Account = () => {
     fetchUserData();
   }, [user]);
 
+  const handleLogout = async () => {
+    await signOut(auth);
+    alert("You have been logged out.");
+    window.location.href = "/login";
+  };
+
   return (
     <div className="account-container" style={{color: "white"}}>
       <h2>Account Details</h2>
@@ -36,6 +44,9 @@ const Account = () => {
           <p>
             <strong>Balance:</strong> {balance} Coins
           </p>
+          <button onClick={handleLogout} className="btn btn-danger">
+            Log Out
+          </button>
         </div>
       ) : (
         <p>Loading...</p>
