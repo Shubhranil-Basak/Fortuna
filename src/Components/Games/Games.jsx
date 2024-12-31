@@ -2,6 +2,7 @@ import React from "react";
 import GamesCard from "./GameCard";
 import { Container, Row, Col } from "react-bootstrap";
 import coin from "../../assets/coin.png";
+import wheel from "../../assets/slot-machine.png";
 
 const Games = () => {
   return (
@@ -17,6 +18,9 @@ const Games = () => {
           >
             <Col xs={12} sm={6} md={4} lg={3} className="game-card">
               <GamesCard imgPath={coin} title="Coin Flip" />
+            </Col>
+            <Col xs={12} sm={6} md={4} lg={3} className="game-card">
+              <GamesCard imgPath={wheel} title="Wheel of Fortune" />
             </Col>
           </Row>
         </Container>
