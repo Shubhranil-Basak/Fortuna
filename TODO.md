@@ -1,16 +1,16 @@
 ### **1. Plan**
 #### Pages/Components:
    -  **Home Page**: Introduction and navigation to gambling/trading sections.
-   -  **Gambling Section**: List of games (e.g., Coin Toss, Dice Roll, Blackjack).
+   - $\checkmark$ **Gambling Section**: List of games (e.g., Coin Toss, Dice Roll, Blackjack).
    - **Trading Section**: A dashboard for stock simulation with buy/sell features.
-   -  **Account Page**: Display user balance, transaction history, and options to request more currency.
-   -  **Authentication**: Login and registration forms.
+   -  $\checkmark$ **Account Page**: Display user balance, transaction history, and options to request more currency.
+   -  $\checkmark$ **Authentication**: Login and registration forms.
 
 ---
 
 ### **2. Core Features**
 #### Gambling Section:
-   -  Start with a simple game like a coin toss (50/50 win-loss chance).
+   -  $\checkmark$ Start with a simple game like a coin toss (50/50 win-loss chance).
    -  Gradually add more complex games, such as card-based games (e.g., Blackjack).
 
 #### Trading Section:
@@ -19,33 +19,33 @@
    - Display a portfolio summary with "current value" vs. "initial investment."
 
 #### Backend:
-   -  Firebase Authentication: For user login and account creation.
-   -  Firebase Firestore/Realtime Database: To store:
-     - User account details (name, email, balance).
-     - Transaction history for trading and gambling results.
+   -  $\checkmark$ Firebase Authentication: For user login and account creation.
+   -  $\checkmark$ Firebase Firestore/Realtime Database: To store:
+      - User account details (name, email, balance).
+      - Transaction history for trading and gambling results.
 
 ---
 
 ### **3. Design with React**
 #### UI Libraries:
-   -  Use **react-bootstrap** for responsive design (e.g., Navbar, cards, modals).
-   -  Add **react-icons** for playful and visually engaging buttons/icons.
+   -  $\checkmark$ Use **react-bootstrap** for responsive design (e.g., Navbar, cards, modals).
+   -  $\checkmark$ Add **react-icons** for playful and visually engaging buttons/icons.
 
 ---
 
 ### **4. Firebase Integration**
 #### Authentication:
-   -  Implement email/password-based signup and login.
+   -  $\checkmark$ Implement email/password-based signup and login.
    -  Optionally, allow Google or social media login for ease.
 
 #### Database:
-   -  Store user details like:
-     - `uid`
-     - Balance (in-game currency).
-     - Gambling/trading history.
+   -  $\checkmark$ Store user details like:
+      - `uid`
+      - Balance (in-game currency).
+      - Gambling/trading history.
 
 #### Rules:
-   -  Set Firebase security rules to protect user data. (It makes it difficult to implement leaderboards)
+   -  $\checkmark$ Set Firebase security rules to protect user data. (It makes it difficult to implement leaderboards)
 
 ---
 
