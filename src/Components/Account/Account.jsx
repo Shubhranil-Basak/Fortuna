@@ -57,7 +57,7 @@ const Account = () => {
           </button>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>Please Login to diplay your account info</p>
       )}
     </div>
   );
