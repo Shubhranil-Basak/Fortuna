@@ -17,6 +17,9 @@ import Signup from "./Components/Signup/Signup";
 import Home from "./Components/Home/Home";
 import Games from "./Components/Games/Games";
 
+import AddFunds from "./Components/Account/AddFunds";
+
+
 function App() {
   return (
     <>
@@ -29,6 +32,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/games" element={<Games />} />
           <Route path="/account" element={<Account />} />
+        <Route path="/add-funds" element={<AddFunds/>} />
           <Route path="*" element={<h1>Page not found</h1>} />
 
           <Route path="/games/:gameName" element={<GameDetails />} />
