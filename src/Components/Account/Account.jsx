@@ -5,10 +5,12 @@ import { signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { db } from "../../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom"; // Import for navigation
 
 const Account = () => {
   const { user } = useAuth();
   const [balance, setBalance] = useState(0);
+  const navigate = useNavigate(); // Hook to navigate between pages
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -44,6 +46,12 @@ const Account = () => {
           <p>
             <strong>Balance:</strong> {balance} Coins
           </p>
+          <button
+            onClick={() => navigate("/add-funds")}
+            className="btn btn-primary"
+          >
+            Add Funds
+          </button>
           <button onClick={handleLogout} className="btn btn-danger">
             Log Out
           </button>
