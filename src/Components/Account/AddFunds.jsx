@@ -10,6 +10,7 @@ import { db } from "../../config/firebase";
 import { doc, updateDoc, increment } from "firebase/firestore"; // Firestore functions
 import { useAuth } from "../../AuthContext"; // Access user details
 import { useNavigate } from "react-router-dom";
+import "./AddFunds.css";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
