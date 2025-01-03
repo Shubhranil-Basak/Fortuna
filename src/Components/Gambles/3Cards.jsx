@@ -120,7 +120,8 @@ const _3Cards = () => {
                   style={{
                     fontSize: "18px",
                     fontWeight: "bold",
-                    color: "black",
+                    color:
+                      card.suit === "♥" || card.suit === "♦" ? "red" : "black",
                   }}
                 >
                   {card.value}
@@ -128,7 +129,8 @@ const _3Cards = () => {
                 <p
                   style={{
                     fontSize: "24px",
-                    color: "black"
+                    color:
+                      card.suit === "♥" || card.suit === "♦" ? "red" : "black",
                   }}
                 >
                   {card.suit}
