@@ -5,6 +5,7 @@ import coin from "../../assets/coin.png";
 import wheel from "../../assets/slot-machine.png";
 import rps from "../../assets/rps.png";
 import UD from "../../assets/7UD.png";
+import cards from "../../assets/cards.png";
 
 const Games = () => {
   return (
@@ -29,6 +30,9 @@ const Games = () => {
             </Col>
             <Col xs={12} sm={6} md={4} lg={3} className="game-card">
               <GamesCard imgPath={UD} title="7 up 7 down" />
+            </Col>
+            <Col xs={12} sm={6} md={4} lg={3} className="game-card">
+              <GamesCard imgPath={cards} title="3 cards" />
             </Col>
           </Row>
         </Container>
