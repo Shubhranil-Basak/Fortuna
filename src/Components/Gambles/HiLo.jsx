@@ -87,23 +87,55 @@ const HiLoGame = () => {
       </div>
       {currentCard && !gameOver && (
         <div>
-          <div>
-            <p>{currentCard.value}</p>
-            <p>{currentCard.suit}</p>
+          <div
+            style={{
+              width: "100px",
+              height: "150px",
+              border: "2px solid black",
+              borderRadius: "5px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#f9f9f9",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              margin: "20px auto",
+            }}
+          >
+            <p
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                margin: 0,
+                color:
+                  currentCard.suit === "♥" || currentCard.suit === "♦"
+                    ? "red"
+                    : "black",
+              }}
+            >
+              {currentCard.value}
+            </p>
+            <p
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                margin: 0,
+                color:
+                  currentCard.suit === "♥" || currentCard.suit === "♦"
+                    ? "red"
+                    : "black",
+              }}
+            >
+              {currentCard.suit}
+            </p>
           </div>
           <div>
-            <button id="high-low" onClick={() => makeGuess("higher")}>
-              Higher
-            </button>
-            <button id="high-low" onClick={() => makeGuess("lower")}>
-              Lower
-            </button>
+            <button id="high-low" onClick={() => makeGuess("higher")}>Higher</button>
+            <button id="high-low" onClick={() => makeGuess("lower")}>Lower</button>
           </div>
-          <p>Guesses Made: {guesses} / 16</p>
-          <div>
-            <button id="end-game" onClick={endGame}>
-              End Game
-            </button>
+          <p >Guesses Made: {guesses} / 16</p>
+          <div >
+          <button id="end-game" onClick={endGame}>End Game</button>
           </div>
           <p>{message}</p>
         </div>
