@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 const Mines = () => {
   const [grid, setGrid] = useState([]);
@@ -6,10 +9,56 @@ const Mines = () => {
   const [gameOver, setGameOver] = useState(false);
   const [safeRevealed, setSafeRevealed] = useState(0);
   const [betMultiplier, setBetMultiplier] = useState(1); // Starts with 1x
+  const [betAmount, setBetAmount] = useState(10); // Input bet amount
+  const [balance, setBalance] = useState(0); // Balance will be fetched from Firestore
+  const [pool, setPoll] = useState(0);
+  const [winnings, setWinnings] = useState(0); // Stores the winnings after cash out
+  const [gameInit, setGameInit] = useState(false); // Track if the game has started
   const totalMines = 10;
   const totalSafeTiles = 25 - totalMines; // Total tiles - mines
 
+  const auth = getAuth();
+  const user = auth.currentUser; // Get the currently logged-in user
+
+  // Fetch the user's balance from Firestore when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid); // Firestore document for the user
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          setBalance(userDoc.data().balance); // Assuming balance field is in the user's document
+        } else {
+          console.log("No such user document!");
+        }
+
+        const gameRef = doc(db, "games", "mines");
+        const gameDoc = await getDoc(gameRef);
+
+        if (gameDoc.exists()) {
+          setPoll(gameDoc.data().pool);
+        } else {
+          console.log("No such game document!");
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  // Initialize the game
   const initializeGame = () => {
+    if (betAmount > balance) {
+      alert("You don't have enough balance!");
+      return;
+    }
+
+    if (pool <= balance / 2.5) {
+      alert("The pool is too small!");
+      return;
+    }
+
     const newGrid = Array(5)
       .fill(null)
       .map(() => Array(5).fill("safe"));
@@ -28,14 +77,17 @@ const Mines = () => {
       newGrid[row][col] = "mine";
     }
 
+    setGameInit(true);
     setGrid(newGrid);
     setRevealedTiles([]);
     setGameOver(false);
     setSafeRevealed(0);
     setBetMultiplier(1);
+    setWinnings(0); // Reset winnings for a new game
   };
 
-  const handleTileClick = (row, col) => {
+  // Handle tile click
+  const handleTileClick = async (row, col) => {
     if (
       gameOver ||
       revealedTiles.some((tile) => tile.row === row && tile.col === col)
@@ -43,12 +95,18 @@ const Mines = () => {
       return; // Do nothing if game is over or tile is already revealed
     }
 
+    let newBalance = balance;
+    const gameRef = doc(db, "games", "mines");
+
     const newRevealedTiles = [...revealedTiles, { row, col }];
     setRevealedTiles(newRevealedTiles);
 
     if (grid[row][col] === "mine") {
       setGameOver(true);
+      newBalance -= betAmount;
+      await updateDoc(gameRef, { pool: increment(betAmount) });
       alert("You hit a mine! Game over. You lost your bet.");
+      setGameInit(false);
     } else {
       const newSafeRevealed = safeRevealed + 1;
       setSafeRevealed(newSafeRevealed);
@@ -63,6 +121,15 @@ const Mines = () => {
         alert(`You win! You found all safe tiles.`);
       }
     }
+
+    // Update the balance in Firestore
+    const userRef = doc(db, "users", user.uid);
+    await setDoc(userRef, { balance: newBalance }, { merge: true }); // Merge to preserve other fields
+
+    setBalance(newBalance);
+
+    const gameDoc = await getDoc(gameRef);
+    setPoll(gameDoc.data().pool);
   };
 
   // Handle bet amount input
@@ -70,12 +137,36 @@ const Mines = () => {
     setBetAmount(Number(event.target.value));
   };
 
-  const handleCashOut = () => {
+  // Cash Out winnings
+  const handleCashOut = async () => {
     if (!gameOver) {
+      const calculatedWinnings = betAmount * betMultiplier;
+      const newBalance = balance - betAmount + calculatedWinnings;
+
+      const gameRef = doc(db, "games", "mines");
+
+      await updateDoc(gameRef, {
+        pool: increment(betAmount - calculatedWinnings),
+      });
+
+      const userRef = doc(db, "users", user.uid);
+      await setDoc(userRef, { balance: newBalance }, { merge: true });
+
+      setBalance(newBalance);
+      setWinnings(calculatedWinnings);
       setGameOver(true);
+
+      const gameDoc = await getDoc(gameRef);
+      setPoll(gameDoc.data().pool);
+
+      alert(
+        `You cashed out! Your winnings are: ${calculatedWinnings.toFixed(2)}`
+      );
+      setGameInit(false);
     }
   };
 
+  // Render the grid
   const renderGrid = () => {
     return grid.map((row, rowIndex) => (
       <div key={rowIndex} style={{ display: "flex", justifyContent: "center" }}>
