@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 const _3Cards = () => {
   const suits = ["♠", "♥", "♦", "♣"];
@@ -22,8 +25,53 @@ const _3Cards = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
   const [gameResult, setGameResult] = useState(""); // "Win", "Lose", or "Draw"
   const [cardsRevealed, setCardsRevealed] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [pool, setPoll] = useState(0);
+  const [betAmount, setBetAmount] = useState(10);
+  const [gameInit, setGameInit] = useState(false);
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  // Fetch the user's balance from Firestore when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid); // Firestore document for the user
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          setBalance(userDoc.data().balance); // Assuming balance field is in the user's document
+        } else {
+          console.log("No such user document!");
+        }
+
+        const gameRef = doc(db, "games", "3cards");
+        const gameDoc = await getDoc(gameRef);
+
+        if (gameDoc.exists()) {
+          setPoll(gameDoc.data().pool);
+        } else {
+          console.log("No such game document!");
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   const select = () => {
+    setGameInit(true);
+    if (betAmount > balance) {
+      alert("You don't have enough balance!");
+      return;
+    }
+
+    if (pool <= balance / 2.5) {
+      alert("The pool is too small!");
+      return;
+    }
+
     const cardSet = new Set();
 
     while (cardSet.size < 3) {
@@ -45,7 +93,7 @@ const _3Cards = () => {
     setCardsRevealed(false);
   };
 
-  const handleCardClick = (index) => {
+  const handleCardClick = async (index) => {
     if (cardsRevealed) return; // Prevent multiple clicks after revealing
     setSelectedCardIndex(index);
     setCardsRevealed(true);
@@ -54,6 +102,9 @@ const _3Cards = () => {
     const getCardValueRank = (value) => {
       return values.indexOf(value);
     };
+
+    let newBalance = balance;
+    const gameRef = doc(db, "games", "3cards");
 
     const maxRank = Math.max(
       ...result.map((card) => getCardValueRank(card.value))
@@ -69,12 +120,26 @@ const _3Cards = () => {
     if (selectedCardRank === maxRank) {
       if (isDraw) {
         setGameResult("Draw");
+        newBalance -= betAmount / 2;
+        await updateDoc(gameRef, { pool: increment(betAmount / 2) });
       } else {
         setGameResult("Win");
+        newBalance += betAmount;
+        await updateDoc(gameRef, { pool: increment(-betAmount) });
       }
     } else {
       setGameResult("Lose");
+      newBalance -= betAmount;
+      await updateDoc(gameRef, { pool: increment(betAmount) });
     }
+
+    const userRef = doc(db, "users", user.uid);
+    await setDoc(userRef, { balance: newBalance }, { merge: true }); // Merge to preserve other fields
+
+    setBalance(newBalance);
+
+    const gameDoc = await getDoc(gameRef);
+    setPoll(gameDoc.data().pool);
   };
 
   return (
