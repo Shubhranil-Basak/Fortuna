@@ -205,18 +205,61 @@ const Mines = () => {
   };
 
   return (
-    <>
-      <div>
+    <div>
+      <p>Balance: ${balance}</p>
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <label>
+          Enter Bet Amount:{" "}
+          <input
+            type="number"
+            value={betAmount}
+            onChange={handleBetAmountChange}
+            disabled={gameInit} // Prevent changes mid-game
+          />
+        </label>
+      </div>
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <button onClick={(e) => setBetAmount(Number(10))} disabled={gameInit}>
+          10
+        </button>
+        <button onClick={(e) => setBetAmount(Number(50))} disabled={gameInit}>
+          50
+        </button>
+        <button onClick={(e) => setBetAmount(Number(100))} disabled={gameInit}>
+          100
+        </button>
+
         <button
-          onClick={initializeGame}
-          id="play-button"
+          onClick={(e) => setBetAmount(betAmount * 0.5)}
+          disabled={gameInit}
         >
-          Start New Game
+          x0.5
+        </button>
+        <button
+          onClick={(e) => setBetAmount(betAmount * 2)}
+          disabled={gameInit}
+        >
+          x2
+        </button>
+        <button
+          onClick={(e) => setBetAmount(betAmount * 10)}
+          disabled={gameInit}
+        >
+          x10
         </button>
       </div>
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <button onClick={initializeGame} disabled={betAmount < 10} id="play-button">Start New Game</button>
+      </div>
       <div style={{ marginTop: "20px" }}>{renderGrid()}</div>
-      <p>Bet Multiplier: {betMultiplier.toFixed(2)}x</p>
-      <div>
+      <p style={{ justifyContent: "center", display: "flex", marginTop: "10px"}}>Bet Multiplier: {betMultiplier.toFixed(2)}x</p>
+      <div
+        style={{
+          justifyContent: "center",
+          display: "flex",
+          margin: "10px 10px",
+        }}
+      >
         <button
           onClick={handleCashOut}
           disabled={gameOver || revealedTiles.length === 0}
@@ -226,7 +269,7 @@ const Mines = () => {
           Cash Out
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
