@@ -8,6 +8,7 @@ import UD from "../../assets/7UD.png";
 import cards from "../../assets/cards.png";
 import HiLo from "../../assets/HiLo.png";
 import mines from "../../assets/mines.png";
+import scratch from "../../assets/scratch.png";
 const Games = () => {
   return (
     <>
@@ -40,6 +41,9 @@ const Games = () => {
             </Col>
             <Col xs={12} sm={6} md={4} lg={3} className="game-card">
               <GamesCard imgPath={mines} title="mines" />
+            </Col>
+            <Col xs={12} sm={6} md={4} lg={3} className="game-card">
+              <GamesCard imgPath={scratch} title="scratch card" />
             </Col>
           </Row>
         </Container>
