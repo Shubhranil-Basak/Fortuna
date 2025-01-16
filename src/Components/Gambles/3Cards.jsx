@@ -143,13 +143,54 @@ const _3Cards = () => {
   };
 
   return (
-    <>
-      <div style={{ justifyContent: "center", display: "flex" }}>
+    <div>
+      <p>Balance: ${balance}</p>
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+        <label>
+          Enter Bet Amount:{" "}
+          <input
+            type="number"
+            value={betAmount}
+            onChange={(e) => setBetAmount(Number(e.target.value))}
+            min={10}
+            disabled={gameInit}
+          />
+        </label>
+      </div>
+
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+        <button onClick={(e) => setBetAmount(Number(10))} disabled={gameInit}>
+          10
+        </button>
+        <button onClick={(e) => setBetAmount(Number(50))} disabled={gameInit}>
+          50
+        </button>
+        <button onClick={(e) => setBetAmount(Number(100))} disabled={gameInit}>
+          100
+        </button>
+
         <button
-          onClick={select}
-          style={{ marginBottom: "20px" }}
-          id="play-button"
+          onClick={(e) => setBetAmount(betAmount * 0.5)}
+          disabled={gameInit}
         >
+          x0.5
+        </button>
+        <button
+          onClick={(e) => setBetAmount(betAmount * 2)}
+          disabled={gameInit}
+        >
+          x2
+        </button>
+        <button
+          onClick={(e) => setBetAmount(betAmount * 10)}
+          disabled={gameInit}
+        >
+          x10
+        </button>
+      </div>
+
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <button onClick={select} style={{ marginBottom: "20px" }} id="play-button">
           Start Game
         </button>
       </div>
@@ -207,10 +248,9 @@ const _3Cards = () => {
           </div>
         ))}
       </div>
-
       {
-        <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-          <h3 style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ marginTop: "20px", marginBottom: "20px"}}>
+          <h3 style={{display: "flex", justifyContent: "center"}}>
             {gameResult === "Win"
               ? "You Win!"
               : gameResult === "Draw"
@@ -219,13 +259,8 @@ const _3Cards = () => {
               ? "You Lose!"
               : "You haven't chosen a card yet."}
           </h3>
-          <p
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginBottom: "50px",
-            }}
-          >
+          <br></br>
+          <p style={{display: "flex", justifyContent: "center", marginBottom: "50px"}}>
             {gameResult === "Win"
               ? "You chose the card with the highest value!"
               : gameResult === "Draw"
@@ -236,7 +271,7 @@ const _3Cards = () => {
           </p>
         </div>
       }
-    </>
+    </div>
   );
 };
 
