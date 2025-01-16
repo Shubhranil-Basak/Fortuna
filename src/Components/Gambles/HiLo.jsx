@@ -172,8 +172,32 @@ const HiLoGame = () => {
 
   return (
     <div>
-      <div>
-        {!currentCard && <button onClick={startGame}>Start Game</button>}
+      <p>Your Balance: ${balance}</p>
+
+      {/* Bet amount input */}
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+        <input
+          type="number"
+          value={betAmount}
+          onChange={(e) => setBetAmount(Number(e.target.value))}
+          placeholder="Enter your bet amount"
+          min={10}
+          step={10}
+        />
+      </div>
+
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+        <button onClick={(e) => setBetAmount(Number(10))}>10</button>
+        <button onClick={(e) => setBetAmount(Number(50))}>50</button>
+        <button onClick={(e) => setBetAmount(Number(100))}>100</button>
+
+        <button onClick={(e) => setBetAmount(betAmount * 0.5)}>x0.5</button>
+        <button onClick={(e) => setBetAmount(betAmount * 2)}>x2</button>
+        <button onClick={(e) => setBetAmount(betAmount * 10)}>x10</button>
+      </div>
+
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+      {!currentCard && <button onClick={startGame}>Start Game</button>}
       </div>
       {currentCard && !gameOver && (
         <div>
@@ -219,12 +243,14 @@ const HiLoGame = () => {
               {currentCard.suit}
             </p>
           </div>
-          <div>
+          <div
+            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+          >
             <button id="high-low" onClick={() => makeGuess("higher")}>Higher</button>
             <button id="high-low" onClick={() => makeGuess("lower")}>Lower</button>
           </div>
-          <p >Guesses Made: {guesses} / 16</p>
-          <div >
+          <p style={{ display: "flex", gap: "10px", justifyContent: "center" }}>Guesses Made: {guesses} / 16</p>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
           <button id="end-game" onClick={endGame}>End Game</button>
           </div>
           <p>{message}</p>
@@ -234,7 +260,9 @@ const HiLoGame = () => {
       {gameOver &&
         ((<p>Game Over!</p>),
         (
-          <div>
+          <div
+            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+          >
             <button onClick={startGame}>Play Again</button>
           </div>
         ))}
