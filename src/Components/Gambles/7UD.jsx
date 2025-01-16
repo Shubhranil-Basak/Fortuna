@@ -97,12 +97,138 @@ const _7UD = () => {
 
   return (
     <div>
-      <button onClick={() => setBetChoice("Up")}>Up</button>
-      <button onClick={() => setBetChoice("Down")}>Down</button>
-      <button onClick={() => setBetChoice("Even")}>Even</button>
+      <p>Your balance: ${balance}</p>
 
-      <button onClick={rolldice}>Roll the Dice</button>
-      {result && <p>The result is {result}</p>}
+      {/* Buttons for Heads and Tails */}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center",
+          marginBottom: "50px",
+        }}
+      >
+        <button
+          style={{
+            backgroundColor: betChoice === "Up" ? "green" : "#ffffff",
+            color: betChoice === "Up" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("Up")}
+        >
+          Up
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === "Down" ? "green" : "#ffffff",
+            color: betChoice === "Down" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("Down")}
+        >
+          Down
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === "Even" ? "green" : "#ffffff",
+            color: betChoice === "Even" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("Even")}
+        >
+          Even
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === null ? "gray" : "#ffffff",
+            color: betChoice === null ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice(null)}
+        >
+          Reset
+        </button>
+      </div>
+
+      {/* Bet amount input */}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center",
+          marginTop: "10px",
+          marginBottom: "30px",
+        }}
+      >
+        <input
+          type="number"
+          value={betAmount}
+          onChange={(e) => setBetAmount(Number(e.target.value))}
+          placeholder="Enter bet amount"
+          min={10}
+          step={10}
+        />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center",
+          marginTop: "10px",
+          marginBottom: "30px",
+        }}
+      >
+        <button onClick={(e) => setBetAmount(Number(10))}>10</button>
+        <button onClick={(e) => setBetAmount(Number(50))}>50</button>
+        <button onClick={(e) => setBetAmount(Number(100))}>100</button>
+
+        <button onClick={(e) => setBetAmount(betAmount * 0.5)}>x0.5</button>
+        <button onClick={(e) => setBetAmount(betAmount * 2)}>x2</button>
+        <button onClick={(e) => setBetAmount(betAmount * 10)}>x10</button>
+      </div>
+
+      <div
+        style={{
+          justifyContent: "center",
+          display: "flex",
+          marginBottom: "20px",
+        }}
+      >
+        <button
+          id="play-button"
+          onClick={rolldice}
+          disabled={
+            betAmount < 10 ||
+            betChoice == null ||
+            Math.floor(betAmount) != betAmount
+          }
+        >
+          Roll the Dice
+        </button>
+      </div>
+      {result && (
+        <p
+          style={{
+            textAlign: "center",
+            marginBottom: "50px",
+            marginTop: "70px",
+          }}
+        >
+          Value rolled: {result}
+        </p>
+      )}
     </div>
   );
 };
