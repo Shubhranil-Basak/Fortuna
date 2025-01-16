@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
 import { db } from "../../config/firebase"; // Adjust the import according to your project structure
+import scissor from "../../assets/scrissor.png";
+import rock from "../../assets/rock.png";
+import paper from "../../assets/paper.png";
 
 const RPS = () => {
   const [result, setResult] = useState(null);
@@ -96,16 +99,144 @@ const RPS = () => {
   };
 
   return (
-    <>
     <div>
-        <button onClick={() => setBetChoice("Rock")}>Rock</button>
-        <button onClick={() => setBetChoice("Paper")}>Paper</button>
-        <button onClick={() => setBetChoice("Scissors")}>Scissors</button>
-    </div>
-      <div>
-        <button onClick={playGame}>Play</button>
+      <p>Your balance: ${balance}</p>
+      <p style={{ display: "flex", justifyContent: "center" }}>
+        Device Choice{" "}
+      </p>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            border: "1px solid #ccc",
+            padding: "10px",
+            margin: "10px 0",
+            textAlign: "center",
+            width: "200px",
+            height: "200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            objectFit: "cover",
+            backgroundColor: "#f2f2f2",
+            
+          }}
+        >
+          {result && (
+            <img
+              src={
+                result === "Rock" ? rock : result === "Paper" ? paper : scissor
+              }
+              alt={result}
+              style={{ width: "100px", height: "100px" }}
+            />
+          )}
+          {!result && <p style={{color: "black"}}>No choice yet</p>}
+        </div>
       </div>
-    </>
+
+      {/* Buttons for Heads and Tails */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <button
+          style={{
+            backgroundColor: betChoice === "Rock" ? "green" : "#ffffff",
+            color: betChoice === "Rock" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("Rock")}
+        >
+          Rock
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === "Paper" ? "green" : "#ffffff",
+            color: betChoice === "Paper" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("Paper")}
+        >
+          Paper
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === "Scissors" ? "green" : "#ffffff",
+            color: betChoice === "Scissors" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("Scissors")}
+        >
+          Scissors
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === null ? "gray" : "#ffffff",
+            color: betChoice === null ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice(null)}
+        >
+          Reset
+        </button>
+      </div>
+
+      {/* Bet amount input */}
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
+      >
+        <input
+          type="number"
+          value={betAmount}
+          onChange={(e) => setBetAmount(Number(e.target.value))}
+          placeholder="Enter your bet amount"
+          min={10}
+        />
+      </div>
+
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}
+      >
+        <button onClick={(e) => setBetAmount(Number(10))}>10</button>
+        <button onClick={(e) => setBetAmount(Number(50))}>50</button>
+        <button onClick={(e) => setBetAmount(Number(100))}>100</button>
+
+        <button onClick={(e) => setBetAmount(betAmount * 0.5)}>x0.5</button>
+        <button onClick={(e) => setBetAmount(betAmount * 2)}>x2</button>
+        <button onClick={(e) => setBetAmount(betAmount * 10)}>x10</button>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>
+        {/* Display the result of the coin flip */}
+        <button
+          onClick={playGame}
+          id="play-button"
+          disabled={
+            betAmount < 10 ||
+            betChoice == null ||
+            Math.floor(betAmount) != betAmount
+          }
+        >
+          Play the hand
+        </button>
+      </div>
+    </div>
   );
 };
 
