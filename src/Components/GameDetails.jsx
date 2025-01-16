@@ -7,6 +7,7 @@ import _7UD from "./Gambles/7UD";
 import _3Cards from "./Gambles/3Cards";
 import HiLoGame from "./Gambles/HiLo";
 import Mines from "./Gambles/Mines";
+import ScratchCard from "./Gambles/Scratch";
 
 const GameDetails = () => {
   const { gameName } = useParams();
@@ -23,6 +24,7 @@ const GameDetails = () => {
       {gameName === "3-cards" && <_3Cards />}
       {gameName === "high-low" && <HiLoGame />}
       {gameName === "mines" && <Mines />}
+      {gameName === "scratch-card" && <ScratchCard />}
     </div>
   );
 };
