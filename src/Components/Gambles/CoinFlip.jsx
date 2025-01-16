@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
+import head from "../../assets/head.png";
+import tail from "../../assets/tail.png";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
 import { db } from "../../config/firebase"; // Adjust the import according to your project structure
@@ -111,10 +113,92 @@ const CoinFlip = () => {
   };
 
   return (
-    <div>
-      <h1>Coin Flip</h1>
-      <button onClick={flipCoin}>Flip Coin</button>
-      <p>{result}</p>
+    <div className="container">
+      <p>Your Balance: ${balance}</p>
+
+      <div className="coin">
+        <div className="heads">
+          <img src={head} alt="Heads" />
+        </div>
+        <div className="tails">
+          <img src={tail} alt="Tails" />
+        </div>
+      </div>
+
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <button
+          style={{
+            backgroundColor: betChoice === "heads" ? "green" : "#ffffff",
+            color: betChoice === "heads" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("heads")}
+        >
+          Heads
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === "tails" ? "green" : "#ffffff",
+            color: betChoice === "tails" ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice("tails")}
+        >
+          Tails
+        </button>
+        <button
+          style={{
+            backgroundColor: betChoice === null ? "gray" : "#ffffff",
+            color: betChoice === null ? "#ffffff" : "#000000",
+            border: "1px solid #ccc",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+          onClick={() => setBetChoice(null)}
+        >
+          Reset
+        </button>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: "150px",
+          marginTop: "50px",
+          gap: "30px",
+        }}
+      >
+        <input
+          type="number"
+          value={betAmount}
+          onChange={(e) => setBetAmount(Number(e.target.value))}
+          placeholder="Enter your bet amount"
+          min={10}
+        />
+
+        <button
+          className="buttons"
+          id="play-button"
+          onClick={flipCoin}
+          disabled={
+            isFlipping ||
+            betAmount < 10 ||
+            betChoice == null ||
+            Math.floor(betAmount) != betAmount
+          }
+        >
+          Flip Coin
+        </button>
+      </div>
     </div>
   );
 };
