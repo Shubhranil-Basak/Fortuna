@@ -107,9 +107,10 @@ const Wheel_ = () => {
     setMustSpin(false); // Stop spinning
     setGameInit(false);
   };
-  
+
   return (
     <>
+      <p>Your balance: ${balance}</p>
       <div
         style={{
           textAlign: "center",
@@ -141,6 +142,7 @@ const Wheel_ = () => {
             cursor: "pointer",
             marginBottom: "19px",
           }}
+          disabled={gameInit}
         >
           Spin($50)
         </button>
